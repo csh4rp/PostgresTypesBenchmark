@@ -10,7 +10,7 @@ namespace PostgresTypesBenchmark
 {
     class Program
     {
-        private const int RecordsCount = 1;
+        private const int RecordsCount = 500_000;
         private const int Iterations = 10_000;
         private static Context context;
         
@@ -58,6 +58,16 @@ namespace PostgresTypesBenchmark
             var id2 = Guid.Parse("838e7370-c346-11ea-89c5-0242ac120002");
             
             var sw = Stopwatch.StartNew();
+
+            for (int i = 0; i < iterations; i++)
+            {
+                var item = context.TestGuidDefaults.AsNoTracking().FirstOrDefault(x => x.Id == id2);
+            }
+
+            sw.Stop();
+            Console.WriteLine($"Guid Default time: {sw.ElapsedMilliseconds}");
+            
+            sw.Restart();
             for (int i = 0; i < iterations; i++)
             {
                 var item = context.TestInts.AsNoTracking().FirstOrDefault(x => x.Id == 250000);
@@ -85,16 +95,7 @@ namespace PostgresTypesBenchmark
 
             sw.Stop();
             Console.WriteLine($"Guid time: {sw.ElapsedMilliseconds}");
-
-            sw.Restart();
             
-            for (int i = 0; i < iterations; i++)
-            {
-                var item = context.TestGuidDefaults.AsNoTracking().FirstOrDefault(x => x.Id == id2);
-            }
-
-            sw.Stop();
-            Console.WriteLine($"Guid Default time: {sw.ElapsedMilliseconds}");
         }
 
         static void Init()

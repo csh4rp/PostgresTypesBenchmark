@@ -22,6 +22,11 @@ create table table_guid_default(
     value decimal
 );
 
+
+-- script to cluster guid_default
+
+cluster table table_guid_default using table_guid_default_pkey;
+
 -- script to get the id of the middle row
 
 select t.* 
